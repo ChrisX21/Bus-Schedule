@@ -2,13 +2,53 @@ import React from 'react';
 import styled from 'styled-components';
 
 function Login() {
+    const [email, setEmail] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [error, setError] = React.useState('');
+
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+    };
+
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch('http://localhost:3030/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Login failed');
+            }
+
+            const data = await response.json();
+            localStorage.setItem('token', data.accessToken);
+
+            window.location.href = '/';
+        }
+        catch (error) {
+            setError(error.message);
+        }
+    };
+
     return (
         <Container>
             <FormContainer>
                 <h2>Login</h2>
-                <InputField type="email" placeholder="Email" />
-                <InputField type="password" placeholder="Password" />
-                <SubmitButton>Login</SubmitButton>
+                {error && <ErrorMessage>{error}</ErrorMessage>}
+                <InputField type="email" placeholder="Email" value={email} onChange={handleEmailChange} />
+                <InputField type="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
+                <SubmitButton onClick={handleSubmit}>Login</SubmitButton>
             </FormContainer>
         </Container>
     );
@@ -59,6 +99,11 @@ const SubmitButton = styled.button`
     &:hover {
         background-color: #0056b3;
     }
+`;
+
+const ErrorMessage = styled.div`
+    color: red;
+    margin-bottom: 1rem;
 `;
 
 export default Login;

@@ -1,9 +1,31 @@
 import React from 'react';
 import { FaBus } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-function Navbar({ isLoggedIn }) {
+function Navbar({ isLoggedIn, setIsLoggedIn }) {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('http://localhost:3030/users/logout', {
+        method: 'GET',
+        headers: {
+          'X-Authorization': localStorage.getItem('token')
+        }
+      });
+
+      if (response.status === 204) {
+        localStorage.removeItem('token');
+        setIsLoggedIn(false);
+        navigate('/');
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  };
+
   return (
     <NavbarContainer>
       <HomeLink to="/">
@@ -13,7 +35,7 @@ function Navbar({ isLoggedIn }) {
       <NavbarOptions>
         {isLoggedIn ? (
           <>
-            <NavButton to="/logout">Logout</NavButton>
+            <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
             <NavButton to="/create-new-bus">Create New Bus</NavButton>
           </>
         ) : (
@@ -73,5 +95,20 @@ const NavButton = styled(Link)`
   }
 `;
 
+const LogoutButton = styled.button`
+  margin-left: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  color: #282c34;
+  background-color: white;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  text-align: center;
+
+  &:hover {
+    background-color: #61dafb;
+  }
+`;
 
 export default Navbar;

@@ -1,15 +1,65 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 function Register() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+    };
+
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+    };
+
+    const handleRepeatPasswordChange = (event) => {
+        setRepeatPassword(event.target.value);
+    };
+
+    const handleSubmit = async () => {
+        try {
+            if (password !== repeatPassword) {
+                throw new Error('Passwords do not match');
+            }
+
+            const response = await fetch('http://localhost:3030/users/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Registration failed');
+            }
+
+            const data = await response.json();
+            localStorage.setItem('token', data.accessToken);
+
+            // Optionally redirect or update state after successful registration
+            window.location.href = '/'; // Redirect to homepage
+
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
     return (
         <Container>
             <FormContainer>
                 <h2>Register</h2>
-                <InputField type="email" placeholder="Email" />
-                <InputField type="password" placeholder="Password" />
-                <InputField type="password" placeholder="Repeat Password" />
-                <SubmitButton>Register</SubmitButton>
+                {error && <ErrorMessage>{error}</ErrorMessage>}
+                <InputField type="email" placeholder="Email" value={email} onChange={handleEmailChange} />
+                <InputField type="password" placeholder="Password" value={password} onChange={handlePasswordChange} />
+                <InputField type="password" placeholder="Repeat Password" value={repeatPassword} onChange={handleRepeatPasswordChange} />
+                <SubmitButton onClick={handleSubmit}>Register</SubmitButton>
             </FormContainer>
         </Container>
     );
@@ -60,6 +110,11 @@ const SubmitButton = styled.button`
     &:hover {
         background-color: #0056b3;
     }
+`;
+
+const ErrorMessage = styled.div`
+    color: red;
+    margin-bottom: 1rem;
 `;
 
 export default Register;
