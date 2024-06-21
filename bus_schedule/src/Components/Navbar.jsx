@@ -4,25 +4,27 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 function Navbar({ isLoggedIn }) {
-    return (
-        <NavbarContainer>
-            <HomeLink to="/">
-                <h1>Bus Schedule</h1>
-                <FaBus />
-            </HomeLink>
-            <NavbarOptions>
-                {isLoggedIn ? (
-                    <NavButton to="/logout">Logout</NavButton>
-                ) : (
-                    <>
-                        <NavButton to="/login">Login</NavButton>
-                        <NavButton to="/register">Register</NavButton>
-                    </>
-                )}
-                {isLoggedIn && <NavButton to="/create-new-bus">Create New Bus</NavButton>}
-            </NavbarOptions>
-        </NavbarContainer>
-    );
+  return (
+    <NavbarContainer>
+      <HomeLink to="/">
+        <h1>Bus Schedule</h1>
+        <FaBus />
+      </HomeLink>
+      <NavbarOptions>
+        {isLoggedIn ? (
+          <>
+            <NavButton to="/logout">Logout</NavButton>
+            <NavButton to="/create-new-bus">Create New Bus</NavButton>
+          </>
+        ) : (
+          <>
+            <NavButton to="/login">Login</NavButton>
+            <NavButton to="/register">Register</NavButton>
+          </>
+        )}
+      </NavbarOptions>
+    </NavbarContainer>
+  );
 }
 
 const NavbarContainer = styled.nav`
