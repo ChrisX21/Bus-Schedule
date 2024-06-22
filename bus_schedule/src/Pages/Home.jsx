@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import BusCard from '../Components/BusCard';
 
-function Home() {
+function Home({ isLoggedIn }) {
     const [busInfo, setBusInfo] = useState(null);
     const [schedule, setSchedule] = useState(null);
     const [error, setError] = useState(null);
@@ -54,7 +54,7 @@ function Home() {
                 <SectionTitle>Bus Stations</SectionTitle>
                 <CardGrid>
                     {Object.entries(busInfo).map(([busId, busStation]) => (
-                        <BusCard key={busId} busStation={busStation} />
+                        <BusCard key={busId} busStation={busStation} isLoggedIn={isLoggedIn} />
                     ))}
                 </CardGrid>
             </Section>

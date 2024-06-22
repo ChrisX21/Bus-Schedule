@@ -5,6 +5,8 @@ import Home from './Home';
 import Login from './Login';
 import Register from './Register';
 import Navbar from '../Components/Navbar';
+import CreateBusStation from './CreateBusStation';
+import EditBusStation from '../Components/EditBusStation';
 
 function Pages() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -34,14 +36,16 @@ function Pages() {
             <BrowserRouter>
                 <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
                 <Routes>
-                    <Route path='/' element={<Home />} />
+                    <Route path='/' element={<Home isLoggedIn={isLoggedIn} />} />
                     <Route path='*' element={<NotFound />} />
                     {!isLoggedIn ? (
                         <>
                             <Route path='/login' element={<Login />} />
                             <Route path='/register' element={<Register />} />
                         </>
-                    ) : null}
+                    ) :
+                        <Route path='/Station/New' element={<CreateBusStation />} />}
+                    <Route path='/Station/Edit/:id' element={<EditBusStation />} />
                 </Routes>
             </BrowserRouter>
         </>

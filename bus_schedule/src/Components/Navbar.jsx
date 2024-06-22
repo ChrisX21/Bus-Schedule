@@ -35,8 +35,10 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
       <NavbarOptions>
         {isLoggedIn ? (
           <>
+            <CenteredDiv>
+              <NavButton to="/Station/New">Create Bus Station</NavButton>
+            </CenteredDiv>
             <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
-            <NavButton to="/create-new-bus">Create New Bus</NavButton>
           </>
         ) : (
           <>
@@ -76,6 +78,14 @@ const HomeLink = styled(Link)`
 
 const NavbarOptions = styled.div`
   display: flex;
+  align-items: center;
+`;
+
+const CenteredDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
 `;
 
 const NavButton = styled(Link)`
@@ -107,7 +117,7 @@ const LogoutButton = styled.button`
   text-align: center;
 
   &:hover {
-    background-color: #61dafb;
+    background-color: red;
   }
 `;
 
